@@ -32,3 +32,22 @@ Derust 是一个用于快速创建 C/C++ 项目的命令行工具，支持生成
 + ❌多项目工作空间
 + ❌网络项目依赖获取
 + ❌自定义构建流
+
+# 命令
++ `new <name> [--exe|--lib|--dll] [--dir=<DIR>]`: 创建新项目
++ `build [<name>] [-r|--release] [--dir=<DIR>]`: 构建项目
++ `run [<name>] [-r|--release] [--dir=<DIR>]`: 运行项目
++ `clean [--dir=<DIR>]`: 清理项目中间文件缓存
++ `help`: 显示帮助信息
+
+# `derust.toml`支持(会检阅的)字段
+```toml
+[project]
+name = "project_name"               # 项目名称
+
+[build]
+c = 17                              # C语言标准
+cxx = 20                            # C++语言标准
+target = "exe"                      # 项目类型，可选值：exe、lib、dll
+generator = "Visual Studio 16 2019" # 指示 CMake 的生成器(构建工具)
+```
