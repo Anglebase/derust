@@ -1,0 +1,5 @@
+**/CMakeLists.txt
+/.cache
+/.packages
+/target
+/.vscode

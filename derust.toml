@@ -1,0 +1,9 @@
+[project]
+name = "derust"
+version = "0.1.0"
+
+[build]
+target = "exe"
+cpp = 20
+
+[dependencies]
