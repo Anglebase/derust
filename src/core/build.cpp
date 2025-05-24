@@ -63,6 +63,7 @@ Package build_all_dependecies(const fs::path &cache, const std::vector<fs::path>
     Package package;
     for (const auto &dep : dependecies)
     {
+        LOG_INFO("#[ Begin: Building dependecy: ", dep.string(), "]");
         auto md5 = MD5(dep);
         auto cache_dir = cache / (dep.filename().string() + "-" + md5.toStr());
         auto build_dir = cache_dir / "build";
@@ -107,6 +108,7 @@ Package build_all_dependecies(const fs::path &cache, const std::vector<fs::path>
         {
             LOG_WARN("Warning: The dependecy '", name, "' at '", dep.string(), "' is 'exe'");
         }
+        LOG_INFO("#[ End: Building dependecy: ", dep.string(), "]");
     }
     return package;
 }
@@ -207,6 +209,19 @@ int generate_cmake_files(const CmdLine &cmd, const Config &config)
     gen_cmake.else_();
     gen_cmake.add_complie_options({"-Wall", "-Wextra", "-Werror", "-g", "-O2"});
     gen_cmake.endif_();
+
+    auto build = *config.config["build"].as_table();
+    if (build.contains("options") && build["options"].is_array())
+    {
+        auto options = *build["options"].as_array();
+        for (const auto &option : options)
+        {
+            if(!option.is_string())
+                throw std::runtime_error("Invalid build option.");
+            auto str = option.value<std::string>().value();
+            gen_cmake.add_complie_options({str});
+        }
+    }
 
     if (cmake_config == cmake::Config::Debug)
         gen_cmake.add_defines({"DEBUG", "_DEBUG"});
