@@ -93,6 +93,8 @@ void find_all_source_files(const fs::path &dir, std::vector<fs::path> &files)
 
 std::vector<fs::path> find_all_exe_files(const fs::path &dir)
 {
+    if (!fs::exists(dir) || !fs::is_directory(dir))
+        return std::vector<fs::path>();
     std::vector<fs::path> files;
     for (auto &entry : fs::directory_iterator(dir))
     {
@@ -126,7 +128,8 @@ int generate_cmake_files(const CmdLine &cmd, const Config &config)
     gen_cmake.project(name);
     gen_cmake.set_c_standard(stdc);
     gen_cmake.set_cxx_standard(stdcxx);
-    gen_cmake.include_directories({fs::current_path() / "include"});
+    if (fs::exists(fs::current_path() / "include"))
+        gen_cmake.include_directories({fs::current_path() / "include"});
 
     gen_cmake.if_("MSVC");
     gen_cmake.add_complie_options({"/W4", "/Zi"});
@@ -144,7 +147,8 @@ int generate_cmake_files(const CmdLine &cmd, const Config &config)
         gen_cmake.set_library_output_path(fs::current_path() / TARGET);
 
     std::vector<fs::path> source_files;
-    find_all_source_files(fs::current_path() / "src", source_files);
+    if (fs::exists(fs::current_path() / "src"))
+        find_all_source_files(fs::current_path() / "src", source_files);
 
     fs::path exe_dir =
         target == "exe"
