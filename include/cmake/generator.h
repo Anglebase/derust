@@ -36,6 +36,8 @@ namespace cmake
         void add_executable(const std::string &name, const std::vector<fs::path> &sources);
         void add_library(const std::string &name, LibaryType type, const std::vector<fs::path> &sources);
         void include_directories(const std::vector<fs::path> &dirs);
+        void link_directories(const std::vector<fs::path> &dirs);
+        void link_libraries(const std::vector<std::string> &libs);
         void add_complie_options(const std::vector<std::string> &options);
         void target_link_libraries(const std::string &name, Visual visual, const std::vector<std::string> &libs);
         void target_link_directories(const std::string &name, Visual visual, const std::vector<fs::path> &dirs);

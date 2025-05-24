@@ -12,6 +12,7 @@
  */
 class Config
 {
+public:
     toml::table config;
 
 public:
@@ -43,7 +44,7 @@ public:
     }
 
     template <class T>
-    T need(const std::string &key_dir, T default_, std::string_view warning_message_view = "") const
+    T need(const std::string &key_dir, T default_, bool show_warning = true, std::string_view warning_message_view = "") const
     {
         const char *info = "'. It will use the default value: '";
         std::string warning_message;
@@ -58,20 +59,23 @@ public:
         {
             if (!table->contains(key) || !table->at(key).is_table())
             {
-                LOG_WARN(warning_message, info, default_, "'.");
+                if (show_warning)
+                    LOG_WARN(warning_message, info, default_, "'.");
                 return default_;
             }
             table = table->at(key).as_table();
         }
         if (!table->contains(keys.back()))
         {
-            LOG_WARN(warning_message, info, default_, "'.");
+            if (show_warning)
+                LOG_WARN(warning_message, info, default_, "'.");
             return default_;
         }
         toml::v3::optional<T> value = table->at(keys.back()).value<T>();
         if (!value.has_value())
         {
-            LOG_WARN(warning_message, info, default_, "'.");
+            if (show_warning)
+                LOG_WARN(warning_message, info, default_, "'.");
             return default_;
         }
         return value.value();

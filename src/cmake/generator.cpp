@@ -96,6 +96,26 @@ void cmake::Generator::include_directories(const std::vector<fs::path> &dirs)
     this->commands.push_back(oss.str());
 }
 
+void cmake::Generator::link_directories(const std::vector<fs::path> &dirs)
+{
+    std::ostringstream oss;
+    oss << "link_directories(";
+    for (const auto &dir : dirs)
+        oss << replace_all(dir.string(), "\\", "/") << " ";
+    oss << ")";
+    this->commands.push_back(oss.str());
+}
+
+void cmake::Generator::link_libraries(const std::vector<std::string> &libs)
+{
+    std::ostringstream oss;
+    oss << "link_libraries(";
+    for (const auto &lib : libs)
+        oss << lib << " ";
+    oss << ")";
+    this->commands.push_back(oss.str());
+}
+
 void cmake::Generator::add_complie_options(const std::vector<std::string> &options)
 {
     std::ostringstream oss;

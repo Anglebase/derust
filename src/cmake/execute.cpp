@@ -24,7 +24,7 @@ Execute &cmake::Execute::build_dir(const fs::path &build_dir)
 Execute &cmake::Execute::generator(const std::string &generator)
 {
     this->commands.push_back("-G");
-    this->commands.push_back(generator);
+    this->commands.push_back('"' + generator + '"');
     return *this;
 }
 
